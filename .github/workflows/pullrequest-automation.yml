@@ -1,0 +1,2 @@
+- name: Pull Request Automation
+  uses: DrBarnabus/pullrequest-automation@v3.3.0
