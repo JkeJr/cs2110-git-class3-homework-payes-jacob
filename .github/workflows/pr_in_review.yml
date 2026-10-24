@@ -1,25 +1,14 @@
-# Source - https://stackoverflow.com/a/78035250
-# Posted by Brian Leishman, modified by community. See post 'Timeline' for change history
-# Retrieved 2026-10-23, License - CC BY-SA 4.0
-
-name: Callable Front End Issue Tracker
-
 on:
-  workflow_call:
+  pull_request:
+    types: [opened, edited, ready_for_review, synchronize]
 
 jobs:
-  manage-project:
+  move-linked-issues:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
+    name: Move linked issues to In Review or In Progress column
     steps:
-      - name: Move PR to Review Needed
-        uses: leonsteinhaeuser/project-beta-automations@v2.1.0
-        if: ${{ github.event_name == 'pull_request_target' && github.event.action == 'review_requested' }}
+      - uses: rharter/github-move-linked-project-cards@v0.1.0
         with:
-          gh_token: ${{ secrets.SMG_TOKEN }}
-          organization: MyOrg
-          project_id: 3
-          resource_node_id: ${{ github.event.pull_request.node_id }}
-          move_related_issues: true
-          status_value: 'Dev: Review Needed 🙌' # Target status
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          column: In Review
+          draft-column: In Progress
